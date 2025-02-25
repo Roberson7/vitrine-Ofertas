@@ -1298,18 +1298,29 @@
           filteredProducts.forEach((product) => {
             const productCard = `
               <div class="product-card">
-                <img src="${product.image}" alt="${product.name}" onclick="showDescription('${product.id}')">
+                <img src="${product.image}" alt="${
+              product.name
+            }" onclick="showDescription('${product.id}')">
                 <div class="click-hint">Clique na imagem para ver descrição</div>
                 <h3>${product.name}</h3>
                 <div class="price-container">
                   ${
-                    product.promoPrice !== null && product.promoPrice !== undefined
-                      ? `<span class="original-price">${formatPrice(product.price)}</span>
-                         <span class="promo-price">${formatPrice(product.promoPrice)}</span>`
-                      : `<span class="single-price">${formatPrice(product.price)}</span>`
+                    product.promoPrice !== null &&
+                    product.promoPrice !== undefined
+                      ? `<span class="original-price">${formatPrice(
+                          product.price
+                        )}</span>
+                         <span class="promo-price">${formatPrice(
+                           product.promoPrice
+                         )}</span>`
+                      : `<span class="single-price">${formatPrice(
+                          product.price
+                        )}</span>`
                   }
                 </div>
-                <button onclick="addToCart(event, '${product.id}')">Adicionar ao Carrinho</button>
+                <button onclick="addToCart(event, '${
+                  product.id
+                }')">Adicionar ao Carrinho</button>
               </div>
             `;
             productsGrid.innerHTML += productCard;
@@ -1333,13 +1344,19 @@
                   <img src="${product.image}" alt="${product.name}">
                   <span>${product.name} - ${
               product.promoPrice !== null && product.promoPrice !== undefined
-                ? `De ${formatPrice(product.price)} para ${formatPrice(product.promoPrice)}`
+                ? `De ${formatPrice(product.price)} para ${formatPrice(
+                    product.promoPrice
+                  )}`
                 : formatPrice(product.price)
             } (${category ? category.name : "Sem categoria"})</span>
                 </div>
                 <div>
-                  <button class="edit-btn" onclick="openEditForm('${product.id}')">Editar</button>
-                  <button onclick="deleteProduct('${product.id}')">Excluir</button>
+                  <button class="edit-btn" onclick="openEditForm('${
+                    product.id
+                  }')">Editar</button>
+                  <button onclick="deleteProduct('${
+                    product.id
+                  }')">Excluir</button>
                 </div>
               </div>
             `;
@@ -1523,9 +1540,13 @@
               <div class="cart-item">
                 <span>${product.name}</span>
                 <div style="display: flex; align-items: center; gap: 8px;">
-                  <button onclick="decreaseQuantity('${item.productId}')">−</button>
+                  <button onclick="decreaseQuantity('${
+                    item.productId
+                  }')">−</button>
                   <span>${item.quantity}x</span>
-                  <button onclick="increaseQuantity('${item.productId}')">+</button>
+                  <button onclick="increaseQuantity('${
+                    item.productId
+                  }')">+</button>
                   <span>${formatPrice(itemTotal)}</span>
                 </div>
               </div>
@@ -1755,13 +1776,21 @@
             <div class="price-container">
               ${
                 product.promoPrice !== null && product.promoPrice !== undefined
-                  ? `<span class="original-price">${formatPrice(product.price)}</span>
-                     <span class="promo-price">${formatPrice(product.promoPrice)}</span>`
-                  : `<span class="single-price">${formatPrice(product.price)}</span>`
+                  ? `<span class="original-price">${formatPrice(
+                      product.price
+                    )}</span>
+                     <span class="promo-price">${formatPrice(
+                       product.promoPrice
+                     )}</span>`
+                  : `<span class="single-price">${formatPrice(
+                      product.price
+                    )}</span>`
               }
             </div>
             <p>${product.description}</p>
-            <button onclick="addToCart(event, '${product.id}')">Adicionar ao Carrinho</button>
+            <button onclick="addToCart(event, '${
+              product.id
+            }')">Adicionar ao Carrinho</button>
           `;
 
           modal.style.display = "block";
