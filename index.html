@@ -214,94 +214,110 @@
 
       .products-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 10px;
-        margin: 0 0 10px 0; /* Remova margem superior e ajuste a inferior */
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Two columns on larger screens */
+        gap: 20px; /* Increased gap for better spacing */
+        margin: 20px 0; /* More margin for breathing room */
+        padding: 0 15px; /* Padding on sides for smaller screens */
       }
 
       .product-card {
-        background: #1a2a52;
-        padding: 8px;
-        border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+        background: linear-gradient(135deg, #1a2a52, #2a5298); /* Slightly darker gradient for depth */
+        padding: 15px; /* More padding for a spacious feel */
+        border-radius: 12px; /* Larger radius for modern look */
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6); /* Stronger shadow for elevation */
         text-align: center;
-        transition: transform 0.3s ease;
+        transition: transform 0.4s ease, box-shadow 0.4s ease; /* Smoother transitions */
         position: relative;
+        overflow: hidden; /* Ensure content stays within card */
       }
 
       .product-card:hover {
-        transform: translateY(-5px);
+        transform: translateY(-10px); /* Larger lift on hover */
+        box-shadow: 0 12px 30px rgba(33, 150, 243, 0.7); /* Enhanced shadow on hover */
       }
 
+      /* Larger and more prominent product images */
       .product-card img {
         max-width: 100%;
-        height: 80px;
-        object-fit: cover;
-        border-radius: 6px;
+        height: 200px; /* Increased height for better visibility */
+        object-fit: cover; /* Maintain aspect ratio */
+        border-radius: 8px;
         cursor: pointer;
-        transition: transform 0.3s ease;
+        transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add shadow transition */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Subtle shadow on images */
       }
 
       .product-card img:hover {
-        transform: scale(1.05);
+        transform: scale(1.1); /* Larger zoom on hover */
+        box-shadow: 0 6px 15px rgba(33, 150, 243, 0.5); /* Glow effect on hover */
       }
 
+      /* Updated product text styling */
       .product-card h3 {
-        margin: 8px 0;
-        font-size: 0.9rem;
+        margin: 12px 0;
+        font-size: 1.1rem; /* Larger font for readability */
         color: #e0e7ff;
+        font-weight: 600; /* Bolder text */
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); /* Subtle text shadow for depth */
       }
 
       .price-container {
-        margin-bottom: 8px;
+        margin-bottom: 12px; /* More spacing */
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 2px;
+        gap: 6px; /* Increased gap between prices */
       }
 
       .original-price {
         color: #b0c4ff;
-        font-size: 0.7rem;
+        font-size: 0.9rem; /* Slightly larger */
         text-decoration: line-through;
+        opacity: 0.8; /* Slightly faded for contrast */
       }
 
       .promo-price {
         color: #ff4444;
-        font-size: 0.9rem;
+        font-size: 1.2rem; /* Larger and bolder for emphasis */
         font-weight: bold;
+        text-shadow: 0 1px 2px rgba(255, 68, 68, 0.3); /* Red shadow for pop */
       }
 
       .single-price {
-        font-size: 0.9rem;
+        font-size: 1.1rem; /* Larger single price */
         color: #e0e7ff;
+        font-weight: 500;
       }
 
       .product-card button {
-        background: linear-gradient(45deg, #2a5298, #3b6db5);
+        background: linear-gradient(45deg, #4a90e2, #63b3ed); /* Brighter blue gradient */
         color: white;
         border: none;
-        padding: 6px 12px;
-        border-radius: 12px;
+        padding: 10px 20px; /* Larger button for better clickability */
+        border-radius: 15px; /* Rounded corners for modern look */
         cursor: pointer;
-        font-size: 0.7rem;
-        transition: transform 0.3s ease;
+        font-size: 0.9rem; /* Larger text */
+        font-weight: bold;
+        transition: transform 0.3s ease, background 0.3s ease; /* Smooth transitions */
+        box-shadow: 0 4px 10px rgba(74, 144, 226, 0.4); /* Button shadow */
       }
 
       .product-card button:hover {
-        transform: scale(1.05);
+        transform: scale(1.1); /* Larger scale on hover */
+        background: linear-gradient(45deg, #63b3ed, #4a90e2); /* Reverse gradient on hover */
+        box-shadow: 0 6px 15px rgba(74, 144, 226, 0.6); /* Enhanced shadow on hover */
       }
 
+      /* Click hint styling for interactivity */
       .click-hint {
-        font-size: 0.6rem;
-        margin: 4px 0;
+        font-size: 0.8rem; /* Slightly larger */
+        margin: 8px 0;
         background: linear-gradient(90deg, #ffeb3b, #f44336, #9c27b0, #2196f3);
         background-size: 400% 400%;
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
-        animation: gradientShift 4s infinite ease-in-out,
-          pulse 2s infinite ease-in-out;
+        animation: gradientShift 4s infinite ease-in-out, pulse 2s infinite ease-in-out;
       }
 
       @keyframes gradientShift {
@@ -703,17 +719,26 @@
           max-height: 200px;
         }
         .products-grid {
-          grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Two columns on tablets */
+          gap: 15px;
+          padding: 0 10px;
         }
+
+        .product-card {
+          padding: 12px;
+        }
+
         .product-card img {
-          height: 60px;
+          height: 180px; /* Slightly smaller on tablets */
         }
+
         .product-card h3 {
-          font-size: 0.8rem;
+          font-size: 1rem;
         }
+
         .product-card button {
-          padding: 5px 10px;
-          font-size: 0.6rem;
+          padding: 8px 16px;
+          font-size: 0.8rem;
         }
       }
 
@@ -722,17 +747,25 @@
           max-height: 150px;
         }
         .products-grid {
-          grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Two columns on mobile */
+          gap: 10px;
+          padding: 0 5px;
         }
+        .product-card {
+          padding: 10px;
+        }
+
         .product-card img {
-          height: 50px;
+          height: 150px; /* Smaller on mobile */
         }
+
         .product-card h3 {
-          font-size: 0.7rem;
+          font-size: 0.9rem;
         }
+
         .product-card button {
-          padding: 4px 8px;
-          font-size: 0.55rem;
+          padding: 6px 12px;
+          font-size: 0.7rem;
         }
         .cart-content {
           max-width: 250px;
@@ -935,19 +968,6 @@
             </form>
             <div class="category-items" id="category-items">
               <h3>Categorias Cadastradas</h3>
-            </div>
-            <form
-              id="category-form"
-              class="admin-form"
-              onsubmit="addCategory(event)"
-            >
-              <input
-                type="text"
-                id="category-name"
-                placeholder="Nome da Categoria"
-                required
-              />
-              <button type="submit">Adicionar Categoria</button>
             </form>
             <form
               id="seller-phone-form"
@@ -1298,15 +1318,12 @@
           filteredProducts.forEach((product) => {
             const productCard = `
               <div class="product-card">
-                <img src="${product.image}" alt="${
-              product.name
-            }" onclick="showDescription('${product.id}')">
+                <img src="${product.image}" alt="${product.name}" onclick="showDescription('${product.id}')">
                 <div class="click-hint">Clique na imagem para ver descrição</div>
                 <h3>${product.name}</h3>
                 <div class="price-container">
                   ${
-                    product.promoPrice !== null &&
-                    product.promoPrice !== undefined
+                    product.promoPrice !== null && product.promoPrice !== undefined
                       ? `<span class="original-price">${formatPrice(
                           product.price
                         )}</span>
@@ -1318,9 +1335,7 @@
                         )}</span>`
                   }
                 </div>
-                <button onclick="addToCart(event, '${
-                  product.id
-                }')">Adicionar ao Carrinho</button>
+                <button onclick="addToCart(event, '${product.id}')">Adicionar ao Carrinho</button>
               </div>
             `;
             productsGrid.innerHTML += productCard;
@@ -1540,13 +1555,9 @@
               <div class="cart-item">
                 <span>${product.name}</span>
                 <div style="display: flex; align-items: center; gap: 8px;">
-                  <button onclick="decreaseQuantity('${
-                    item.productId
-                  }')">−</button>
+                  <button onclick="decreaseQuantity('${item.productId}')">−</button>
                   <span>${item.quantity}x</span>
-                  <button onclick="increaseQuantity('${
-                    item.productId
-                  }')">+</button>
+                  <button onclick="increaseQuantity('${item.productId}')">+</button>
                   <span>${formatPrice(itemTotal)}</span>
                 </div>
               </div>
@@ -1788,9 +1799,7 @@
               }
             </div>
             <p>${product.description}</p>
-            <button onclick="addToCart(event, '${
-              product.id
-            }')">Adicionar ao Carrinho</button>
+            <button onclick="addToCart(event, '${product.id}')">Adicionar ao Carrinho</button>
           `;
 
           modal.style.display = "block";
