@@ -747,7 +747,7 @@
           max-height: 150px;
         }
         .products-grid {
-          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Two columns on mobile */
+          grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* Two columns on mobile, smaller min-width for tighter fit */
           gap: 10px;
           padding: 0 5px;
         }
@@ -968,6 +968,19 @@
             </form>
             <div class="category-items" id="category-items">
               <h3>Categorias Cadastradas</h3>
+            </div>
+            <form
+              id="category-form"
+              class="admin-form"
+              onsubmit="addCategory(event)"
+            >
+              <input
+                type="text"
+                id="category-name"
+                placeholder="Nome da Categoria"
+                required
+              />
+              <button type="submit">Adicionar Categoria</button>
             </form>
             <form
               id="seller-phone-form"
