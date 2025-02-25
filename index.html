@@ -148,7 +148,6 @@
         box-shadow: 0 3px 8px rgba(46, 204, 113, 0.6);
       }
 
-      /* Estilo para a mensagem rolante */
       .marquee-container {
         margin-top: 5px;
         background: rgba(255, 255, 255, 0.1);
@@ -158,13 +157,13 @@
         width: 100%;
         text-align: center;
         position: sticky;
-        top: 115px; /* Ajustado para ficar abaixo da nav-bar */
+        top: 115px;
         z-index: 85;
       }
 
       .marquee-container marquee {
-        color: #2ecc71; /* Verde claro */
-        font-size: 1.1rem; /* Tamanho maior */
+        color: #2ecc71;
+        font-size: 1.1rem;
         font-weight: 500;
       }
 
@@ -174,7 +173,7 @@
           font-size: 0.75rem;
         }
         .marquee-container marquee {
-          font-size: 0.95rem; /* Um pouco menor em tablets */
+          font-size: 0.95rem;
         }
       }
 
@@ -194,10 +193,10 @@
           text-align: center;
         }
         .marquee-container {
-          top: 90px; /* Ajustado para mobile */
+          top: 90px;
         }
         .marquee-container marquee {
-          font-size: 0.85rem; /* Um pouco menor em celulares */
+          font-size: 0.85rem;
         }
       }
 
@@ -1308,7 +1307,8 @@
         contactSellerItem.className = "nav-item contact-seller";
         contactSellerItem.innerHTML = `<span style="font-size: 0.9rem;">📞</span> Fale com o Vendedor`;
         contactSellerItem.onclick = () => {
-          const whatsappUrl = `https://wa.me/${sellerPhone}?text=${encodeURIComponent(
+          const cleanPhone = sellerPhone.replace(/\D/g, ""); // Limpa o número
+          const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(
             "Olá, gostaria de mais informações sobre os produtos da Vitrine de Ofertas!"
           )}`;
           window.open(whatsappUrl, "_blank");
@@ -1822,7 +1822,8 @@
           document.getElementById("cart-total").textContent
         }`;
 
-        const whatsappUrl = `https://wa.me/${sellerPhone}?text=${encodeURIComponent(
+        const cleanPhone = sellerPhone.replace(/\D/g, ""); // Limpa o número
+        const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(
           message
         )}`;
         window.open(whatsappUrl, "_blank");
@@ -1948,15 +1949,33 @@
       function updateSellerPhone(event) {
         event.preventDefault();
         const phoneInput = document.getElementById("seller-phone").value;
-        const cleanedPhone = phoneInput.replace(/\D/g, "");
-        if (cleanedPhone.length < 10) {
-          alert("Por favor, insira um número de WhatsApp válido!");
+        let cleanedPhone = phoneInput.replace(/\D/g, ""); // Remove todos os caracteres não numéricos
+
+        // Adiciona o código do país (+55) se não estiver presente
+        if (!cleanedPhone.startsWith("55") && cleanedPhone.length >= 10 && cleanedPhone.length <= 11) {
+          cleanedPhone = "55" + cleanedPhone;
+        }
+
+        // Validação: número deve ter entre 12 e 13 dígitos (DDD + número + código do país)
+        if (cleanedPhone.length < 12 || cleanedPhone.length > 13) {
+          alert("Por favor, insira um número de WhatsApp válido! Exemplo: 5511987654321 (com código do país) ou 11987654321 (sem código).");
           return;
         }
+
+        // Atualiza a variável global
         sellerPhone = cleanedPhone;
+
+        // Atualiza a interface imediatamente
         renderNavBar();
-        saveToJSONBin();
-        alert("Número do vendedor atualizado com sucesso!");
+
+        // Salva no JSONBin
+        saveToJSONBin().then(() => {
+          alert("Número do vendedor atualizado com sucesso: " + cleanedPhone);
+          document.getElementById("seller-phone").value = cleanedPhone; // Atualiza o campo de input
+        }).catch((error) => {
+          console.error("Erro ao salvar o número:", error);
+          alert("Erro ao salvar o número do vendedor. Tente novamente.");
+        });
       }
 
       function showDescription(productId) {
