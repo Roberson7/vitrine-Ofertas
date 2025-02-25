@@ -137,6 +137,18 @@
         box-shadow: 0 0 8px rgba(255, 68, 68, 0.7);
       }
 
+      /* Novo estilo para o item "Fale com o Vendedor" */
+      .nav-item.contact-seller {
+        background: linear-gradient(45deg, #2ecc71, #27ae60);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .nav-item.contact-seller:hover {
+        box-shadow: 0 3px 8px rgba(46, 204, 113, 0.6);
+      }
+
       @media (max-width: 768px) {
         .nav-item {
           padding: 4px 10px;
@@ -751,7 +763,6 @@
         background: linear-gradient(45deg, #63b3ed, #4a90e2);
       }
 
-      /* Nova Modal para Erro de Senha */
       .password-error-modal {
         display: none;
         position: fixed;
@@ -1105,7 +1116,6 @@
         <button onclick="closeCartSuccessModal()">OK</button>
       </div>
 
-      <!-- Nova Modal para Erro de Senha -->
       <div class="password-error-modal" id="password-error-modal">
         <h3>Erro!</h3>
         <p>Senha incorreta! Tente novamente.</p>
@@ -1259,6 +1269,18 @@
           navItem.onclick = () => filterProducts(category.id);
           navBar.appendChild(navItem);
         });
+
+        // Adicionar o item "Fale com o Vendedor"
+        const contactSellerItem = document.createElement("div");
+        contactSellerItem.className = "nav-item contact-seller";
+        contactSellerItem.innerHTML = `<span style="font-size: 0.9rem;">📞</span> Fale com o Vendedor`;
+        contactSellerItem.onclick = () => {
+          const whatsappUrl = `https://wa.me/${sellerPhone}?text=${encodeURIComponent(
+            "Olá, gostaria de mais informações sobre os produtos da Vitrine de Ofertas!"
+          )}`;
+          window.open(whatsappUrl, "_blank");
+        };
+        navBar.appendChild(contactSellerItem);
       }
 
       function filterProducts(categoryId) {
@@ -1295,7 +1317,7 @@
           populateCategorySelects();
           document.getElementById("seller-phone").value = sellerPhone;
         } else {
-          showPasswordErrorModal(); // Exibe a nova modal em vez de alert
+          showPasswordErrorModal();
         }
       }
 
@@ -1749,7 +1771,7 @@
           return;
         }
 
-        let message = "Olá, Gosta saber sobre esse produto(s):\n";
+        let message = "Olá, gostaria saber sobre esse produto(s):\n";
         cart.forEach((item) => {
           const product = products.find((p) => p.id === item.productId);
           if (product) {
@@ -1899,6 +1921,7 @@
           return;
         }
         sellerPhone = cleanedPhone;
+        renderNavBar(); // Atualiza a barra de navegação para refletir o novo número
         saveToJSONBin();
         alert("Número do vendedor atualizado com sucesso!");
       }
@@ -1953,7 +1976,6 @@
         modal.classList.remove("show");
       }
 
-      // Funções para a nova modal de erro de senha
       function showPasswordErrorModal() {
         const modal = document.getElementById("password-error-modal");
         modal.classList.add("show");
