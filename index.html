@@ -148,7 +148,7 @@
         .nav-bar {
           padding: 3px 5px;
           gap: 6px;
-          justify-content: center; /* Alterado para centralizar */
+          justify-content: center;
           overflow-x: auto;
           white-space: nowrap;
           top: 50px;
@@ -751,13 +751,55 @@
         background: linear-gradient(45deg, #63b3ed, #4a90e2);
       }
 
+      /* Nova Modal para Erro de Senha */
+      .password-error-modal {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: linear-gradient(135deg, #1a2a52, #2a5298);
+        color: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+        z-index: 300;
+        text-align: center;
+        width: 90%;
+        max-width: 300px;
+        animation: fadeInUp 0.4s ease;
+      }
+
+      .password-error-modal.show {
+        display: block;
+      }
+
+      .password-error-modal button {
+        background: linear-gradient(45deg, #4a90e2, #63b3ed);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        margin-top: 15px;
+        transition: transform 0.3s ease;
+      }
+
+      .password-error-modal button:hover {
+        transform: scale(1.1);
+        background: linear-gradient(45deg, #63b3ed, #4a90e2);
+      }
+
       @media (max-width: 480px) {
-        .cart-success-modal {
+        .cart-success-modal,
+        .password-error-modal {
           max-width: 250px;
           padding: 15px;
         }
 
-        .cart-success-modal button {
+        .cart-success-modal button,
+        .password-error-modal button {
           padding: 8px 16px;
           font-size: 0.8rem;
         }
@@ -1062,6 +1104,13 @@
         <p>Produto adicionado ao carrinho com sucesso!</p>
         <button onclick="closeCartSuccessModal()">OK</button>
       </div>
+
+      <!-- Nova Modal para Erro de Senha -->
+      <div class="password-error-modal" id="password-error-modal">
+        <h3>Erro!</h3>
+        <p>Senha incorreta! Tente novamente.</p>
+        <button onclick="closePasswordErrorModal()">OK</button>
+      </div>
     </div>
 
     <script>
@@ -1246,7 +1295,7 @@
           populateCategorySelects();
           document.getElementById("seller-phone").value = sellerPhone;
         } else {
-          alert("Senha incorreta!");
+          showPasswordErrorModal(); // Exibe a nova modal em vez de alert
         }
       }
 
@@ -1901,6 +1950,17 @@
 
       function closeCartSuccessModal() {
         const modal = document.getElementById("cart-success-modal");
+        modal.classList.remove("show");
+      }
+
+      // Funções para a nova modal de erro de senha
+      function showPasswordErrorModal() {
+        const modal = document.getElementById("password-error-modal");
+        modal.classList.add("show");
+      }
+
+      function closePasswordErrorModal() {
+        const modal = document.getElementById("password-error-modal");
         modal.classList.remove("show");
       }
 
