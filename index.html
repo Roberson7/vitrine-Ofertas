@@ -15,7 +15,7 @@
       body {
         background: linear-gradient(135deg, #0f1c3d, #1e3c72);
         color: #e0e7ff;
-        padding: 5px;
+        padding: 70px 5px 5px 5px; /* Ajustado para acomodar o header fixo */
         line-height: 1.6;
       }
 
@@ -33,8 +33,9 @@
         align-items: center;
         border-radius: 8px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-        position: sticky;
+        position: fixed; /* Header fixo no topo */
         top: 0;
+        width: 100%; /* Ocupa toda a largura */
         z-index: 100;
       }
 
@@ -68,7 +69,7 @@
       .nav-bar {
         background: linear-gradient(90deg, #1e3c72, #2a5298);
         padding: 4px 10px;
-        margin: 20px 0 10px; /* Espaço de 20px acima (entre carrossel e barra) */
+        margin: 10px 0; /* Reduzido o espaço superior */
         border-radius: 15px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
         display: flex;
@@ -77,6 +78,8 @@
         z-index: 90;
         flex-wrap: wrap;
         animation: glow 2s infinite ease-in-out;
+        position: sticky; /* Barra de navegação fixa ao rolar */
+        top: 60px; /* Ajustado para ficar abaixo do header */
       }
 
       @keyframes glow {
@@ -143,25 +146,29 @@
       @media (max-width: 480px) {
         .nav-bar {
           padding: 3px 5px;
-          gap: 5px;
+          gap: 6px; /* Reduzido para melhor espaçamento */
           justify-content: flex-start;
           overflow-x: auto;
           white-space: nowrap;
+          top: 50px; /* Ajustado para header menor em mobile */
         }
         .nav-item {
-          padding: 3px 8px;
-          font-size: 0.65rem;
+          padding: 4px 10px; /* Ajustado para melhor legibilidade */
+          font-size: 0.7rem; /* Ligeiramente maior */
+          min-width: 70px; /* Tamanho mínimo */
+          text-align: center;
         }
       }
 
       .carousel {
         position: relative;
         max-width: 100%;
-        margin: 10px 0; /* Reduzido para evitar espaço excessivo acima */
+        margin: 10px 0;
         overflow: hidden;
         border-radius: 8px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
         height: auto;
+        z-index: 80; /* Menor que a nav-bar */
       }
 
       .carousel-container {
@@ -823,13 +830,13 @@
                 type="url"
                 id="product-image-url"
                 placeholder="URL da Imagem"
-                style="display: block;"
+                style="display: block"
               />
               <input
                 type="file"
                 id="product-image-file"
                 accept="image/*"
-                style="display: none;"
+                style="display: none"
               />
               <input
                 type="text"
@@ -877,13 +884,13 @@
                 type="url"
                 id="edit-product-image-url"
                 placeholder="URL da Imagem"
-                style="display: block;"
+                style="display: block"
               />
               <input
                 type="file"
                 id="edit-product-image-file"
                 accept="image/*"
-                style="display: none;"
+                style="display: none"
               />
               <input
                 type="text"
@@ -1038,22 +1045,27 @@
 
       async function saveToJSONBin() {
         try {
-          const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              "X-Master-Key": API_KEY,
-            },
-            body: JSON.stringify({
-              products,
-              categories,
-              carouselImages,
-              logo,
-              sellerPhone,
-            }),
-          });
+          const response = await fetch(
+            `https://api.jsonbin.io/v3/b/${BIN_ID}`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                "X-Master-Key": API_KEY,
+              },
+              body: JSON.stringify({
+                products,
+                categories,
+                carouselImages,
+                logo,
+                sellerPhone,
+              }),
+            }
+          );
           if (!response.ok) {
-            throw new Error("Erro ao salvar no JSONBin: " + response.statusText);
+            throw new Error(
+              "Erro ao salvar no JSONBin: " + response.statusText
+            );
           }
           console.log("Dados salvos com sucesso no JSONBin");
           localStorage.setItem("cart", JSON.stringify(cart));
@@ -1527,9 +1539,13 @@
               <div class="cart-item">
                 <span>${product.name}</span>
                 <div style="display: flex; align-items: center; gap: 8px;">
-                  <button onclick="decreaseQuantity('${item.productId}')">−</button>
+                  <button onclick="decreaseQuantity('${
+                    item.productId
+                  }')">−</button>
                   <span>${item.quantity}x</span>
-                  <button onclick="increaseQuantity('${item.productId}')">+</button>
+                  <button onclick="increaseQuantity('${
+                    item.productId
+                  }')">+</button>
                   <span>${formatPrice(itemTotal)}</span>
                 </div>
               </div>
@@ -1559,7 +1575,10 @@
           if (cartItem.quantity > 1) {
             cartItem.quantity--;
           } else {
-            cart.splice(cart.findIndex((item) => item.productId === productId), 1);
+            cart.splice(
+              cart.findIndex((item) => item.productId === productId),
+              1
+            );
           }
           updateCartCount();
           renderCart();
@@ -1599,12 +1618,18 @@
                 ? product.promoPrice
                 : product.price;
             const itemTotal = itemPrice * item.quantity;
-            message += `${product.name} (${item.quantity}x) - ${formatPrice(itemTotal)}\n`;
+            message += `${product.name} (${item.quantity}x) - ${formatPrice(
+              itemTotal
+            )}\n`;
           }
         });
-        message += `Total: ${document.getElementById("cart-total").textContent}`;
+        message += `Total: ${
+          document.getElementById("cart-total").textContent
+        }`;
 
-        const whatsappUrl = `https://wa.me/${sellerPhone}?text=${encodeURIComponent(message)}`;
+        const whatsappUrl = `https://wa.me/${sellerPhone}?text=${encodeURIComponent(
+          message
+        )}`;
         window.open(whatsappUrl, "_blank");
 
         cart = [];
@@ -1762,7 +1787,9 @@
               }
             </div>
             <p>${product.description}</p>
-            <button onclick="addToCart(event, '${product.id}')">Adicionar ao Carrinho</button>
+            <button onclick="addToCart(event, '${
+              product.id
+            }')">Adicionar ao Carrinho</button>
           `;
 
           modal.style.display = "block";
