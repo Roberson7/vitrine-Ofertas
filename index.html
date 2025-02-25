@@ -137,7 +137,6 @@
         box-shadow: 0 0 8px rgba(255, 68, 68, 0.7);
       }
 
-      /* Novo estilo para o item "Fale com o Vendedor" */
       .nav-item.contact-seller {
         background: linear-gradient(45deg, #2ecc71, #27ae60);
         display: flex;
@@ -149,10 +148,33 @@
         box-shadow: 0 3px 8px rgba(46, 204, 113, 0.6);
       }
 
+      /* Estilo para a mensagem rolante */
+      .marquee-container {
+        margin-top: 5px;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 5px 0;
+        border-radius: 5px;
+        overflow: hidden;
+        width: 100%;
+        text-align: center;
+        position: sticky;
+        top: 115px; /* Ajustado para ficar abaixo da nav-bar */
+        z-index: 85;
+      }
+
+      .marquee-container marquee {
+        color: #2ecc71; /* Verde claro */
+        font-size: 1.1rem; /* Tamanho maior */
+        font-weight: 500;
+      }
+
       @media (max-width: 768px) {
         .nav-item {
           padding: 4px 10px;
           font-size: 0.75rem;
+        }
+        .marquee-container marquee {
+          font-size: 0.95rem; /* Um pouco menor em tablets */
         }
       }
 
@@ -170,6 +192,12 @@
           font-size: 0.7rem;
           min-width: 70px;
           text-align: center;
+        }
+        .marquee-container {
+          top: 90px; /* Ajustado para mobile */
+        }
+        .marquee-container marquee {
+          font-size: 0.85rem; /* Um pouco menor em celulares */
         }
       }
 
@@ -902,6 +930,12 @@
       </div>
 
       <div class="nav-bar" id="nav-bar"></div>
+      <div class="marquee-container">
+        <marquee behavior="scroll" direction="left">
+          Adicione o produto no carrinho e fale com o vendedor ou Fale direto
+          com o vendedor clicando no ícone verde
+        </marquee>
+      </div>
 
       <div class="products-grid" id="products"></div>
 
@@ -1270,7 +1304,6 @@
           navBar.appendChild(navItem);
         });
 
-        // Adicionar o item "Fale com o Vendedor"
         const contactSellerItem = document.createElement("div");
         contactSellerItem.className = "nav-item contact-seller";
         contactSellerItem.innerHTML = `<span style="font-size: 0.9rem;">📞</span> Fale com o Vendedor`;
@@ -1921,7 +1954,7 @@
           return;
         }
         sellerPhone = cleanedPhone;
-        renderNavBar(); // Atualiza a barra de navegação para refletir o novo número
+        renderNavBar();
         saveToJSONBin();
         alert("Número do vendedor atualizado com sucesso!");
       }
