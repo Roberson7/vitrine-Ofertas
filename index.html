@@ -167,6 +167,22 @@
         font-weight: 500;
       }
 
+      .share-icon {
+        cursor: pointer;
+        padding: 5px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 50%;
+        transition: transform 0.3s ease, background 0.3s ease;
+        font-size: 0.9rem;
+        opacity: 0.7;
+        margin-left: 5px;
+      }
+
+      .share-icon:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(1.1);
+      }
+
       @media (max-width: 768px) {
         .nav-item {
           padding: 4px 10px;
@@ -829,6 +845,85 @@
         background: linear-gradient(45deg, #63b3ed, #4a90e2);
       }
 
+      .share-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 200;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .share-modal.show {
+        opacity: 1;
+      }
+
+      .share-content {
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: white;
+        width: 90%;
+        max-width: 400px;
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        padding: 15px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        animation: zoomIn 0.4s ease;
+      }
+
+      .share-content h3 {
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+      }
+
+      .share-content input {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border: none;
+        border-radius: 5px;
+        background: rgba(255, 255, 255, 0.8);
+        color: #333;
+        font-size: 0.9rem;
+      }
+
+      .share-content button {
+        background: linear-gradient(45deg, #4a90e2, #63b3ed);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: transform 0.3s ease;
+        width: 100%;
+      }
+
+      .share-content button:hover {
+        transform: scale(1.05);
+        background: linear-gradient(45deg, #63b3ed, #4a90e2);
+      }
+
+      .close-share {
+        position: absolute;
+        top: 8px;
+        right: 10px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        color: white;
+        transition: transform 0.3s ease;
+      }
+
+      .close-share:hover {
+        transform: rotate(90deg);
+      }
+
       @media (max-width: 480px) {
         .cart-success-modal,
         .password-error-modal {
@@ -1154,6 +1249,15 @@
         <p>Senha incorreta! Tente novamente.</p>
         <button onclick="closePasswordErrorModal()">OK</button>
       </div>
+
+      <div class="share-modal" id="share-modal">
+        <div class="share-content">
+          <span class="close-share" onclick="closeShareModal()">×</span>
+          <h3>Link de Compartilhamento</h3>
+          <input type="text" id="share-link" readonly />
+          <button onclick="copyShareLink()">Copiar Link</button>
+        </div>
+      </div>
     </div>
 
     <script>
@@ -1274,6 +1378,12 @@
       }
 
       function loadInitialData() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const categoryParam = urlParams.get("category");
+        if (categoryParam) {
+          selectedCategoryId = categoryParam;
+        }
+
         renderNavBar();
         renderProducts();
         renderCarousel();
@@ -1307,13 +1417,20 @@
         contactSellerItem.className = "nav-item contact-seller";
         contactSellerItem.innerHTML = `<span style="font-size: 0.9rem;">📞</span> Fale com o Vendedor`;
         contactSellerItem.onclick = () => {
-          const cleanPhone = sellerPhone.replace(/\D/g, ""); // Limpa o número
+          const cleanPhone = sellerPhone.replace(/\D/g, "");
           const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(
             "Olá, gostaria de mais informações sobre os produtos da Vitrine de Ofertas!"
           )}`;
           window.open(whatsappUrl, "_blank");
         };
         navBar.appendChild(contactSellerItem);
+
+        const shareItem = document.createElement("div");
+        shareItem.className = "share-icon";
+        shareItem.innerHTML = "🔗";
+        shareItem.title = "Gerar Link de Compartilhamento";
+        shareItem.onclick = generateShareLink;
+        navBar.appendChild(shareItem);
       }
 
       function filterProducts(categoryId) {
@@ -1822,7 +1939,7 @@
           document.getElementById("cart-total").textContent
         }`;
 
-        const cleanPhone = sellerPhone.replace(/\D/g, ""); // Limpa o número
+        const cleanPhone = sellerPhone.replace(/\D/g, "");
         const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(
           message
         )}`;
@@ -1949,32 +2066,28 @@
       function updateSellerPhone(event) {
         event.preventDefault();
         const phoneInput = document.getElementById("seller-phone").value;
-        let cleanedPhone = phoneInput.replace(/\D/g, ""); // Remove todos os caracteres não numéricos
+        let cleanedPhone = phoneInput.replace(/\D/g, "");
 
-        // Adiciona o código do país (+55) se não estiver presente
-        if (!cleanedPhone.startsWith("55") && cleanedPhone.length >= 10 && cleanedPhone.length <= 11) {
+        if (
+          !cleanedPhone.startsWith("55") &&
+          cleanedPhone.length >= 10 &&
+          cleanedPhone.length <= 11
+        ) {
           cleanedPhone = "55" + cleanedPhone;
         }
 
-        // Validação: número deve ter entre 12 e 13 dígitos (DDD + número + código do país)
         if (cleanedPhone.length < 12 || cleanedPhone.length > 13) {
-          alert("Por favor, insira um número de WhatsApp válido! Exemplo: 5511987654321 (com código do país) ou 11987654321 (sem código).");
+          alert(
+            "Por favor, insira um número de WhatsApp válido! Exemplo: 5511987654321 (com código do país) ou 11987654321 (sem código)."
+          );
           return;
         }
 
-        // Atualiza a variável global
         sellerPhone = cleanedPhone;
-
-        // Atualiza a interface imediatamente
         renderNavBar();
-
-        // Salva no JSONBin
         saveToJSONBin().then(() => {
           alert("Número do vendedor atualizado com sucesso: " + cleanedPhone);
-          document.getElementById("seller-phone").value = cleanedPhone; // Atualiza o campo de input
-        }).catch((error) => {
-          console.error("Erro ao salvar o número:", error);
-          alert("Erro ao salvar o número do vendedor. Tente novamente.");
+          document.getElementById("seller-phone").value = cleanedPhone;
         });
       }
 
@@ -2036,6 +2149,35 @@
       function closePasswordErrorModal() {
         const modal = document.getElementById("password-error-modal");
         modal.classList.remove("show");
+      }
+
+      function generateShareLink() {
+        const baseUrl = window.location.origin + window.location.pathname;
+        let shareUrl = baseUrl;
+
+        if (selectedCategoryId) {
+          shareUrl += `?category=${encodeURIComponent(selectedCategoryId)}`;
+        }
+
+        const modal = document.getElementById("share-modal");
+        const shareLinkInput = document.getElementById("share-link");
+        shareLinkInput.value = shareUrl;
+
+        modal.style.display = "block";
+        setTimeout(() => modal.classList.add("show"), 10);
+      }
+
+      function closeShareModal() {
+        const modal = document.getElementById("share-modal");
+        modal.classList.remove("show");
+        setTimeout(() => (modal.style.display = "none"), 300);
+      }
+
+      function copyShareLink() {
+        const shareLinkInput = document.getElementById("share-link");
+        shareLinkInput.select();
+        document.execCommand("copy");
+        alert("Link copiado para a área de transferência!");
       }
 
       loadDataFromJSONBin();
